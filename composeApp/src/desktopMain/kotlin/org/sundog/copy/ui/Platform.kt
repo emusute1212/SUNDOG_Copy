@@ -1,4 +1,4 @@
-package org.sundog.copy
+package org.sundog.copy.ui
 
 class JVMPlatform {
     val name: String = "Java ${System.getProperty("java.version")}"

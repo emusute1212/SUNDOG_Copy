@@ -1,4 +1,4 @@
-package org.sundog.copy
+package org.sundog.copy.ui
 
 import androidx.compose.ui.window.Window
 import androidx.compose.ui.window.application

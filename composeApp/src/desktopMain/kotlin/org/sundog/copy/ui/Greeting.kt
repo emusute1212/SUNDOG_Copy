@@ -1,4 +1,4 @@
-package org.sundog.copy
+package org.sundog.copy.ui
 
 class Greeting {
     private val platform = getPlatform()
