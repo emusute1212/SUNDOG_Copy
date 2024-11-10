@@ -4,8 +4,8 @@ compose-multiplatform = "1.7.0"
 junit = "4.13.2"
 kotlin = "2.0.21"
 okio = "3.9.1"
-kotlin-seriarizable-json = "1.7.3"
 kotlinx-coroutines = "1.9.0"
+koin = "4.0.0"
 
 [libraries]
 kotlin-test = { module = "org.jetbrains.kotlin:kotlin-test", version.ref = "kotlin" }
@@ -14,11 +14,13 @@ junit = { group = "junit", name = "junit", version.ref = "junit" }
 androidx-lifecycle-viewmodel = { group = "org.jetbrains.androidx.lifecycle", name = "lifecycle-viewmodel", version.ref = "androidx-lifecycle" }
 androidx-lifecycle-runtime-compose = { group = "org.jetbrains.androidx.lifecycle", name = "lifecycle-runtime-compose", version.ref = "androidx-lifecycle" }
 kotlinx-coroutines-swing = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-swing", version.ref = "kotlinx-coroutines" }
-kotlinx-serialization-json = { group = "org.jetbrains.kotlinx", name = "kotlinx-serialization-json", version.ref = "kotlin-seriarizable-json" }
 okio = { group = "com.squareup.okio", name = "okio", version.ref = "okio" }
+koin-bom = { group = "koin", module = "io.insert-koin:koin-bom", version.ref = "koin"}
+koin-core = { group = "koin", module = "io.insert-koin:koin-core" }
+koin-compose = { group = "koin", module = "io.insert-koin:koin-compose" }
+koin-compose-viewmodel = { group = "koin", module = "io.insert-koin:koin-compose-viewmodel" }
 
 [plugins]
 composeMultiplatform = { id = "org.jetbrains.compose", version.ref = "compose-multiplatform" }
 composeCompiler = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
 kotlinMultiplatform = { id = "org.jetbrains.kotlin.multiplatform", version.ref = "kotlin" }
-kotlinSeriarizable = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }

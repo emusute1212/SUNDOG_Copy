@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">SUNDOG Copy</string>
+    <string name="data_restore_dialog_title">SUNDOG Copyデータ復元機能</string>
+    <string name="data_restore_dialog_message">バックアップからの復元および起動に失敗しました。\n\nSUNDOG Copyを初期化します。</string>
+    <string name="data_restore_dialog_button">とじる</string>
+    <string name="always_top_window">このウィンドウを常に手前に表示</string>
+    <string name="setting_name">設定</string>
+</resources>

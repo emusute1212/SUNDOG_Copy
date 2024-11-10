@@ -1,6 +1,6 @@
 package org.sundog.copy.data.repository
 
-import okio.Okio
+import androidx.annotation.WorkerThread
 import okio.use
 import org.sundog.copy.data.entity.CopyContent
 import org.sundog.copy.data.entity.FromLoad
@@ -9,7 +9,9 @@ import org.sundog.copy.extensions.child
 import java.io.File
 
 interface CopyContentRepository {
+    @WorkerThread
     fun loadCopyContent(): LoadedDataContent
+    @WorkerThread
     fun saveCopyContent(copyContents: List<CopyContent>)
 }
 
@@ -24,14 +26,14 @@ class CopyContentRepositoryImpl: CopyContentRepository {
             )
         } catch (e: Exception) {
             LoadedDataContent(
-                fromLoad = FromLoad.SAVED_FILE,
+                fromLoad = FromLoad.BACKUP_FILE,
                 copyContent = loadBackupFile()
             )
         }
     }
 
     override fun saveCopyContent(copyContents: List<CopyContent>) {
-        val targetFile = File(BACKUP_DIRECTORY_NAME)
+        val targetFile = File(DIRECTORY_NAME)
             .child(COPY_CONTENT_FILE_NAME)
         saveBackupFile(copyContents)
         targetFile.saveCopyContent(copyContents)
@@ -61,7 +63,7 @@ class CopyContentRepositoryImpl: CopyContentRepository {
     }
 
     private fun File.saveCopyContent(copyContents: List<CopyContent>) {
-        mkdirs()
+        parentFile.mkdirs()
         bufferedWriter().use { writer ->
             writer.write(copyContents.toCsvText())
         }
@@ -75,10 +77,10 @@ class CopyContentRepositoryImpl: CopyContentRepository {
 
     private fun String.toCopyContents(): List<CopyContent> {
         return split("\n").map {
-            it.split(",").let { (copyText, copyLines) ->
+            it.split(",").let { (label, copyText) ->
                 CopyContent(
+                    label = label,
                     copyText = copyText,
-                    label = copyLines,
                 )
             }
         }
