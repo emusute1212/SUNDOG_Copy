@@ -6,7 +6,10 @@ import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.material.*
+import androidx.compose.material.Button
+import androidx.compose.material.Checkbox
+import androidx.compose.material.Divider
+import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.remember
@@ -15,27 +18,21 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.ExperimentalTextApi
 import androidx.compose.ui.text.font.FontFamily
-import androidx.compose.ui.unit.DpSize
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.DialogWindow
-import androidx.compose.ui.window.rememberDialogState
 import kotlinproject.composeapp.generated.resources.*
-import kotlinproject.composeapp.generated.resources.Res
-import kotlinproject.composeapp.generated.resources.app_name
-import kotlinproject.composeapp.generated.resources.data_restore_dialog_message
-import kotlinproject.composeapp.generated.resources.data_restore_dialog_title
 import org.jetbrains.compose.resources.stringResource
 import org.koin.compose.viewmodel.koinViewModel
 import org.sundog.copy.data.entity.CopyContent
-import org.sundog.copy.data.entity.FromLoad
 import org.sundog.copy.viewModel.TopPageViewModel
 
 @Composable
 fun TopPageHost(
     viewModel: TopPageViewModel = koinViewModel(),
-    isCurrentAlwaysOnTop: Boolean = true,
+    isCurrentAlwaysOnTop: Boolean,
     changeWindowAlwaysTop: (Boolean) -> Unit,
+    onClickSettingButton: () -> Unit,
 ) {
     LaunchedEffect(viewModel) {
         viewModel.initialize()
@@ -44,6 +41,7 @@ fun TopPageHost(
         viewModel = viewModel,
         isCurrentAlwaysOnTop = isCurrentAlwaysOnTop,
         changeWindowAlwaysTop = changeWindowAlwaysTop,
+        onClickSettingButton = onClickSettingButton,
     ) ?: return
 
     TopPage(pageState)
@@ -83,6 +81,11 @@ private fun TopPage(
                     TopPageUiAction.ClickAlwaysTopWindowButton(
                         enable = it,
                     )
+                )
+            },
+            onClickSettingButton = {
+                pageState.onAction(
+                    onAction = TopPageUiAction.ClickSettingButton
                 )
             }
         )
@@ -180,12 +183,13 @@ private fun ColumnScope.CopyContent(
 private fun SundogCopyFooter(
     alwaysOnTop: Boolean = false,
     onCheckedChange: (Boolean) -> Unit,
+    onClickSettingButton: () -> Unit,
 ) {
     Row(
         modifier = Modifier.fillMaxWidth(),
         horizontalArrangement = Arrangement.Center,
     ) {
-        Row (
+        Row(
             modifier = Modifier
                 .clickable(
                     interactionSource = remember { MutableInteractionSource() },
@@ -196,7 +200,7 @@ private fun SundogCopyFooter(
                     )
                 },
             verticalAlignment = Alignment.CenterVertically,
-        ){
+        ) {
             Checkbox(
                 checked = alwaysOnTop,
                 onCheckedChange = {
@@ -214,7 +218,9 @@ private fun SundogCopyFooter(
             contentPadding = PaddingValues(
                 all = 0.dp,
             ),
-            onClick = {},
+            onClick = {
+                onClickSettingButton()
+            },
         ) {
             Text(
                 text = stringResource(Res.string.setting_name),

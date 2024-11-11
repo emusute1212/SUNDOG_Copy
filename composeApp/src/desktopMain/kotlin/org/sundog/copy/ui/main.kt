@@ -1,10 +1,7 @@
 package org.sundog.copy.ui
 
 import androidx.compose.material.MaterialTheme
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
+import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Window
@@ -19,29 +16,83 @@ import org.sundog.copy.di.appModule
 import org.sundog.copy.ui.top.TopPageHost
 
 fun main() = application {
-    val windowState = rememberWindowState(
-        width = 320.dp,
-        height = 400.dp,
-        position = WindowPosition(Alignment.Center)
-    )
-    var isAlwaysOnTop: Boolean by remember { mutableStateOf(false) }
-    val changeWindowAlwaysTop: (Boolean) -> Unit = remember {
-        { isAlwaysOnTop = it }
-    }
-    Window(
-        state = windowState,
+    val sundogCopyAppState = rememberSundogCopyAppState(
         onCloseRequest = ::exitApplication,
-        title = stringResource(Res.string.app_name),
-        alwaysOnTop = isAlwaysOnTop,
-    ) {
+    )
+    App(
+        sundogCopyAppState = sundogCopyAppState,
+    )
+}
+
+@Composable
+private fun App(
+    sundogCopyAppState: SundogCopyAppState,
+) {
+    MaterialTheme {
         KoinApplication(application = {
             modules(appModule())
         }) {
-            MaterialTheme {
-                TopPageHost(
-                    isCurrentAlwaysOnTop = isAlwaysOnTop,
-                    changeWindowAlwaysTop = changeWindowAlwaysTop,
-                )
+            when (sundogCopyAppState.pageType) {
+                PageType.TopPage -> {
+                    Window(
+                        state = rememberWindowState(
+                            width = 320.dp,
+                            height = 400.dp,
+                            position = WindowPosition(Alignment.Center),
+                        ),
+                        onCloseRequest = {
+                            sundogCopyAppState.onAction(
+                                onAction = WindowOnAction.Close
+                            )
+                        },
+                        title = stringResource(Res.string.app_name),
+                        alwaysOnTop = sundogCopyAppState.isAlwaysOnTop,
+                    ) {
+                        TopPageHost(
+                            isCurrentAlwaysOnTop = sundogCopyAppState.isAlwaysOnTop,
+                            changeWindowAlwaysTop = {
+                                sundogCopyAppState.onAction(
+                                    onAction = WindowOnAction.ChangeAlwaysOnTop(it)
+                                )
+                            },
+                            onClickSettingButton = {
+                                sundogCopyAppState.onAction(
+                                    onAction = WindowOnAction.MoveToSettings
+                                )
+                            },
+                        )
+                    }
+                }
+
+                PageType.SettingPage -> {
+                    Window(
+                        state = rememberWindowState(
+                            width = 500.dp,
+                            height = 400.dp,
+                            position = WindowPosition(Alignment.Center),
+                        ),
+                        onCloseRequest = {
+                            sundogCopyAppState.onAction(
+                                onAction = WindowOnAction.MoveToTop
+                            )
+                        },
+                        title = stringResource(Res.string.app_name),
+                    ) {
+                        TopPageHost(
+                            isCurrentAlwaysOnTop = sundogCopyAppState.isAlwaysOnTop,
+                            changeWindowAlwaysTop = {
+                                sundogCopyAppState.onAction(
+                                    onAction = WindowOnAction.ChangeAlwaysOnTop(it)
+                                )
+                            },
+                            onClickSettingButton = {
+                                sundogCopyAppState.onAction(
+                                    onAction = WindowOnAction.MoveToSettings
+                                )
+                            },
+                        )
+                    }
+                }
             }
         }
     }

@@ -1,7 +1,7 @@
 package org.sundog.copy.ui.top
 
 fun interface TopPageAction {
-    operator fun invoke(uiAction: TopPageUiAction)
+    operator fun invoke(onAction: TopPageUiAction)
 }
 
 sealed interface TopPageUiAction {
@@ -14,4 +14,5 @@ sealed interface TopPageUiAction {
     ) : TopPageUiAction
 
     data object CloseDialogButton : TopPageUiAction
+    data object ClickSettingButton : TopPageUiAction
 }
