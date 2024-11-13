@@ -1,5 +1,7 @@
 package org.sundog.copy.ui.top
 
+import org.sundog.copy.data.entity.CopyContent
+
 fun interface TopPageAction {
     operator fun invoke(onAction: TopPageUiAction)
 }
@@ -14,5 +16,7 @@ sealed interface TopPageUiAction {
     ) : TopPageUiAction
 
     data object CloseDialogButton : TopPageUiAction
-    data object ClickSettingButton : TopPageUiAction
+    data class ClickSettingButton(
+        val currentCopyContents: List<CopyContent>,
+    ) : TopPageUiAction
 }

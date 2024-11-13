@@ -32,7 +32,7 @@ fun TopPageHost(
     viewModel: TopPageViewModel = koinViewModel(),
     isCurrentAlwaysOnTop: Boolean,
     changeWindowAlwaysTop: (Boolean) -> Unit,
-    onClickSettingButton: () -> Unit,
+    onClickSettingButton: (currentCopyContents: List<CopyContent>) -> Unit,
 ) {
     LaunchedEffect(viewModel) {
         viewModel.initialize()
@@ -85,7 +85,9 @@ private fun TopPage(
             },
             onClickSettingButton = {
                 pageState.onAction(
-                    onAction = TopPageUiAction.ClickSettingButton
+                    onAction = TopPageUiAction.ClickSettingButton(
+                        currentCopyContents = pageState.copyContents,
+                    )
                 )
             }
         )

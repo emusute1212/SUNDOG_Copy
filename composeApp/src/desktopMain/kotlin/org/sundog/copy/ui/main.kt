@@ -13,6 +13,7 @@ import kotlinproject.composeapp.generated.resources.app_name
 import org.jetbrains.compose.resources.stringResource
 import org.koin.compose.KoinApplication
 import org.sundog.copy.di.appModule
+import org.sundog.copy.ui.setting.SettingPageHost
 import org.sundog.copy.ui.top.TopPageHost
 
 fun main() = application {
@@ -32,7 +33,7 @@ private fun App(
         KoinApplication(application = {
             modules(appModule())
         }) {
-            when (sundogCopyAppState.pageType) {
+            when (val pageType = sundogCopyAppState.pageType) {
                 PageType.TopPage -> {
                     Window(
                         state = rememberWindowState(
@@ -57,14 +58,16 @@ private fun App(
                             },
                             onClickSettingButton = {
                                 sundogCopyAppState.onAction(
-                                    onAction = WindowOnAction.MoveToSettings
+                                    onAction = WindowOnAction.MoveToSettings(
+                                        currentCopyContents = it
+                                    )
                                 )
                             },
                         )
                     }
                 }
 
-                PageType.SettingPage -> {
+                is PageType.SettingPage -> {
                     Window(
                         state = rememberWindowState(
                             width = 500.dp,
@@ -78,18 +81,8 @@ private fun App(
                         },
                         title = stringResource(Res.string.app_name),
                     ) {
-                        TopPageHost(
-                            isCurrentAlwaysOnTop = sundogCopyAppState.isAlwaysOnTop,
-                            changeWindowAlwaysTop = {
-                                sundogCopyAppState.onAction(
-                                    onAction = WindowOnAction.ChangeAlwaysOnTop(it)
-                                )
-                            },
-                            onClickSettingButton = {
-                                sundogCopyAppState.onAction(
-                                    onAction = WindowOnAction.MoveToSettings
-                                )
-                            },
+                        SettingPageHost(
+                            currentCopyContents = pageType.currentCopyContents,
                         )
                     }
                 }

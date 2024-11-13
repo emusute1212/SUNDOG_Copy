@@ -2,8 +2,17 @@
 <resources>
     <string name="app_name">SUNDOG Copy</string>
     <string name="data_restore_dialog_title">SUNDOG Copyデータ復元機能</string>
-    <string name="data_restore_dialog_message">バックアップからの復元および起動に失敗しました。\n\nSUNDOG Copyを初期化します。</string>
+    <string name="data_restore_dialog_message">バックアップからの復元および起動に失敗しました。\n\nSUNDOG
+        Copyを初期化します。
+    </string>
     <string name="data_restore_dialog_button">とじる</string>
     <string name="always_top_window">このウィンドウを常に手前に表示</string>
     <string name="setting_name">設定</string>
+    <string name="setting_copy_label_header_label">ボタンに表示する内容</string>
+    <string name="setting_copy_content_header_label">コピーする内容</string>
+    <string name="setting_delete_copy_content_header_label">削除</string>
+    <string name="setting_delete_copy_content_button">削除</string>
+    <string name="setting_add_copy_content_button">+</string>
+    <string name="setting_save_copy_content_button">保存</string>
+    <string name="setting_about_app_copy_content_button">更新確認</string>
 </resources>

@@ -1,6 +1,7 @@
 package org.sundog.copy.ui
 
 import androidx.compose.runtime.*
+import org.sundog.copy.data.entity.CopyContent
 
 data class SundogCopyAppState(
     val pageType: PageType,
@@ -10,7 +11,9 @@ data class SundogCopyAppState(
 
 sealed interface PageType {
     data object TopPage : PageType
-    data object SettingPage : PageType
+    data class SettingPage(
+        val currentCopyContents: List<CopyContent>,
+    ) : PageType
 }
 
 @Composable
@@ -27,8 +30,10 @@ fun rememberSundogCopyAppState(
                     currentPageType = PageType.TopPage
                 }
 
-                WindowOnAction.MoveToSettings -> {
-                    currentPageType = PageType.SettingPage
+                is WindowOnAction.MoveToSettings -> {
+                    currentPageType = PageType.SettingPage(
+                        currentCopyContents = it.currentCopyContents,
+                    )
                 }
 
                 WindowOnAction.Close -> {

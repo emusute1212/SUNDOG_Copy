@@ -17,7 +17,7 @@ fun rememberTopPageState(
     viewModel: TopPageViewModel,
     isCurrentAlwaysOnTop: Boolean,
     changeWindowAlwaysTop: (Boolean) -> Unit,
-    onClickSettingButton: () -> Unit,
+    onClickSettingButton: (currentCopyContents: List<CopyContent>) -> Unit,
 ): TopPageState? {
     val loadedDataContent by viewModel.loadedDataContent.collectAsState()
     var shouldShowRestoreDialog by remember { mutableStateOf(false) }
@@ -36,8 +36,8 @@ fun rememberTopPageState(
                     shouldShowRestoreDialog = false
                 }
 
-                TopPageUiAction.ClickSettingButton -> {
-                    onClickSettingButton()
+                is TopPageUiAction.ClickSettingButton -> {
+                    onClickSettingButton(it.currentCopyContents)
                 }
             }
         }
