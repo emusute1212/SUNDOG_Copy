@@ -83,6 +83,11 @@ private fun App(
                     ) {
                         SettingPageHost(
                             currentCopyContents = pageType.currentCopyContents,
+                            onMoveToTopPage = {
+                                sundogCopyAppState.onAction(
+                                    onAction = WindowOnAction.MoveToTop
+                                )
+                            }
                         )
                     }
                 }

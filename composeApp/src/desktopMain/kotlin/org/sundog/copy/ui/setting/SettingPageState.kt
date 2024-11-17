@@ -15,6 +15,7 @@ data class SettingPageState(
 @Composable
 fun rememberSettingPageState(
     viewModel: SettingPageViewModel,
+    onMoveToTopPage: () -> Unit,
 ): SettingPageState {
     val copyContents by viewModel.currentCopyContents.collectAsState()
     val onAction = remember(viewModel) {
@@ -33,6 +34,7 @@ fun rememberSettingPageState(
 
                 SettingPageOnAction.SaveCopyContents -> {
                     viewModel.onSaveCopyContents()
+                    onMoveToTopPage()
                 }
 
                 is SettingPageOnAction.ChangeCopyContent -> {

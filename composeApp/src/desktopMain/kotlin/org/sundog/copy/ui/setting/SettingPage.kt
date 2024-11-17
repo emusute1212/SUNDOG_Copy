@@ -28,6 +28,7 @@ import org.sundog.copy.viewModel.SettingPageViewModel
 fun SettingPageHost(
     viewModel: SettingPageViewModel = koinViewModel(),
     currentCopyContents: List<CopyContent>,
+    onMoveToTopPage: () -> Unit,
 ) {
     LaunchedEffect(viewModel) {
         viewModel.initialize(
@@ -37,6 +38,7 @@ fun SettingPageHost(
 
     val pageState = rememberSettingPageState(
         viewModel = viewModel,
+        onMoveToTopPage = onMoveToTopPage,
     )
 
     SettingPage(
