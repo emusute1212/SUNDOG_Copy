@@ -1,6 +1,7 @@
 package org.sundog.copy.data.repository
 
 import androidx.annotation.WorkerThread
+import androidx.compose.ui.util.fastForEach
 import okio.use
 import org.sundog.copy.data.entity.CopyContent
 import org.sundog.copy.data.entity.FromLoad
@@ -11,11 +12,12 @@ import java.io.File
 interface CopyContentRepository {
     @WorkerThread
     fun loadCopyContent(): LoadedDataContent
+
     @WorkerThread
     fun saveCopyContent(copyContents: List<CopyContent>)
 }
 
-class CopyContentRepositoryImpl: CopyContentRepository {
+class CopyContentRepositoryImpl : CopyContentRepository {
     override fun loadCopyContent(): LoadedDataContent {
         val targetFile = File(DIRECTORY_NAME)
             .child(COPY_CONTENT_FILE_NAME)
@@ -71,19 +73,44 @@ class CopyContentRepositoryImpl: CopyContentRepository {
 
     private fun List<CopyContent>.toCsvText(): String {
         return joinToString("\n") {
-            "${it.label}, ${it.copyText}"
+            "\"${it.label}\",\"${it.copyText}\""
         }
     }
 
     private fun String.toCopyContents(): List<CopyContent> {
-        return split("\n").map {
-            it.split(",").let { (label, copyText) ->
-                CopyContent(
-                    label = label,
-                    copyText = copyText,
-                )
+        return splitByLineDelimiter().map { line ->
+            """(?:^|,)(?:"((?:[^"]|"")*)"|([^",\n]*))""".toRegex()
+                .findAll(line)
+                .map { matchResult ->
+                    matchResult.groups[1]?.value?.replace("\"\"", "\"")
+                        ?: matchResult.groups[2]?.value.orEmpty()
+                }
+                .toList()
+                .let { (label, copyText) ->
+                    CopyContent(
+                        label = label,
+                        copyText = copyText,
+                    )
+                }
+        }
+    }
+
+    private fun String.splitByLineDelimiter(): List<String> {
+        val adjustLines = mutableListOf<String>()
+        var temporaryStringBuilder = StringBuilder()
+        split("\n").fastForEach { line ->
+            temporaryStringBuilder.append(line)
+            if (line.startsWith("\"") && line.endsWith("\"")) {
+                adjustLines += temporaryStringBuilder.toString()
+                temporaryStringBuilder = StringBuilder()
+            } else if (line.endsWith("\"")) {
+                adjustLines += temporaryStringBuilder.toString()
+                temporaryStringBuilder = StringBuilder()
+            } else {
+                temporaryStringBuilder.append("\n")
             }
         }
+        return adjustLines
     }
 
     private fun getInitialCopyContent(): List<CopyContent> {
