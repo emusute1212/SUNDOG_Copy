@@ -20,11 +20,11 @@ import androidx.compose.ui.text.ExperimentalTextApi
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.compose.ui.window.DialogWindow
 import kotlinproject.composeapp.generated.resources.*
 import org.jetbrains.compose.resources.stringResource
 import org.koin.compose.viewmodel.koinViewModel
 import org.sundog.copy.data.entity.CopyContent
+import org.sundog.copy.ui.dialogs.InformationDialog
 import org.sundog.copy.viewModel.TopPageViewModel
 
 @Composable
@@ -52,7 +52,10 @@ private fun TopPage(
     pageState: TopPageState,
 ) {
     if (pageState.shouldShowRestoreDialog) {
-        RestoreDialog(
+        InformationDialog(
+            title = stringResource(Res.string.data_restore_dialog_title),
+            message = stringResource(Res.string.data_restore_dialog_message),
+            buttonText = stringResource(Res.string.data_restore_dialog_button),
             onCloseRequest = {
                 pageState.onAction(
                     TopPageUiAction.CloseDialogButton
@@ -91,41 +94,6 @@ private fun TopPage(
                 )
             }
         )
-    }
-}
-
-@OptIn(ExperimentalTextApi::class)
-@Composable
-private fun RestoreDialog(
-    onCloseRequest: () -> Unit,
-) {
-    DialogWindow(
-        onCloseRequest = {
-            onCloseRequest()
-        },
-        title = stringResource(Res.string.data_restore_dialog_title),
-    ) {
-        Column(
-            modifier = Modifier.wrapContentSize()
-                .padding(
-                    horizontal = 16.dp,
-                    vertical = 8.dp
-                ),
-            horizontalAlignment = Alignment.CenterHorizontally,
-        ) {
-            Text(
-                text = stringResource(Res.string.data_restore_dialog_message),
-                fontFamily = FontFamily("メイリオ"),
-            )
-            Button(onClick = {
-                onCloseRequest()
-            }) {
-                Text(
-                    text = stringResource(Res.string.data_restore_dialog_button),
-                    fontFamily = FontFamily("メイリオ"),
-                )
-            }
-        }
     }
 }
 
