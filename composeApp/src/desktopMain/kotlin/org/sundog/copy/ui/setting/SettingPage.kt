@@ -22,13 +22,18 @@ import kotlinproject.composeapp.generated.resources.*
 import org.jetbrains.compose.resources.stringResource
 import org.koin.compose.viewmodel.koinViewModel
 import org.sundog.copy.data.entity.CopyContent
+import org.sundog.copy.ui.dialogs.ConfirmDialog
 import org.sundog.copy.viewModel.SettingPageViewModel
 
 @Composable
 fun SettingPageHost(
     viewModel: SettingPageViewModel = koinViewModel(),
+    shouldShowDialog: Boolean,
     currentCopyContents: List<CopyContent>,
     onMoveToTopPage: () -> Unit,
+    onCancelClose: () -> Unit,
+    onChangeCopyContent: () -> Unit,
+    onSaveCopyContent: () -> Unit,
 ) {
     LaunchedEffect(viewModel) {
         viewModel.initialize(
@@ -38,8 +43,37 @@ fun SettingPageHost(
 
     val pageState = rememberSettingPageState(
         viewModel = viewModel,
+        shouldShowDialog = shouldShowDialog,
         onMoveToTopPage = onMoveToTopPage,
+        onCancelClose = onCancelClose,
+        onChangeCopyContent = onChangeCopyContent,
+        onSaveCopyContent = onSaveCopyContent,
     )
+
+    if (pageState.shouldDontSaveShowDialog) {
+
+        ConfirmDialog(
+            title = stringResource(Res.string.setting_close_confirm_dialog_title),
+            message = stringResource(Res.string.setting_close_confirm_dialog_message),
+            positiveButtonText = stringResource(Res.string.setting_close_confirm_dialog_positive),
+            onClickPositiveButton = {
+                pageState.onAction(
+                    SettingPageOnAction.SaveCopyContents
+                )
+            },
+            negativeButtonText = stringResource(Res.string.setting_close_confirm_dialog_negative),
+            onClickNegativeButtonClick = {
+                pageState.onAction(
+                    SettingPageOnAction.CloseDialogButton,
+                )
+            },
+            onCloseRequest = {
+                pageState.onAction(
+                    SettingPageOnAction.CloseDialogButton,
+                )
+            }
+        )
+    }
 
     SettingPage(
         pageState = pageState,

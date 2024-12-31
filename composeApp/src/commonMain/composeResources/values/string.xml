@@ -15,4 +15,11 @@
     <string name="setting_add_copy_content_button">+</string>
     <string name="setting_save_copy_content_button">保存</string>
     <string name="setting_about_app_copy_content_button">更新確認</string>
+    <string name="setting_close_confirm_dialog_title">確認</string>
+    <string name="setting_close_confirm_dialog_message">
+        変更を保存せずに設定画面を閉じようとしています。\n変更を保存しますか？\n\n変更内容を保存するには「はい」をクリックします。
+    </string>
+    <string name="setting_close_confirm_dialog_cancel">取消</string>
+    <string name="setting_close_confirm_dialog_negative">いいえ</string>
+    <string name="setting_close_confirm_dialog_positive">はい</string>
 </resources>

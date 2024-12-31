@@ -9,15 +9,21 @@ import org.sundog.copy.viewModel.SettingPageViewModel
 
 data class SettingPageState(
     val copyContents: List<CopyContent>,
+    val shouldDontSaveShowDialog: Boolean,
     val onAction: SettingPageAction,
 )
 
 @Composable
 fun rememberSettingPageState(
     viewModel: SettingPageViewModel,
+    shouldShowDialog: Boolean,
     onMoveToTopPage: () -> Unit,
+    onCancelClose: () -> Unit,
+    onChangeCopyContent: () -> Unit,
+    onSaveCopyContent: () -> Unit,
 ): SettingPageState {
     val copyContents by viewModel.currentCopyContents.collectAsState()
+
     val onAction = remember(viewModel) {
         SettingPageAction {
             when (it) {
@@ -32,16 +38,26 @@ fun rememberSettingPageState(
                 SettingPageOnAction.MoveToAboutApp -> {
                 }
 
+                SettingPageOnAction.MoveToTop -> {
+                    onMoveToTopPage()
+                }
+
                 SettingPageOnAction.SaveCopyContents -> {
+                    onSaveCopyContent()
                     viewModel.onSaveCopyContents()
                     onMoveToTopPage()
                 }
 
                 is SettingPageOnAction.ChangeCopyContent -> {
+                    onChangeCopyContent()
                     viewModel.onChangeCopyContent(
                         targetIndex = it.index,
                         targetCopyContent = it.copyContent,
                     )
+                }
+
+                SettingPageOnAction.CloseDialogButton -> {
+                    onCancelClose()
                 }
             }
         }
@@ -49,10 +65,12 @@ fun rememberSettingPageState(
 
     return remember(
         copyContents,
+        shouldShowDialog,
         onAction,
     ) {
         SettingPageState(
             copyContents = copyContents,
+            shouldDontSaveShowDialog = shouldShowDialog,
             onAction = onAction,
         )
     }

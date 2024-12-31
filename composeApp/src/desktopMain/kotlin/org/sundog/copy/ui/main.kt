@@ -1,7 +1,7 @@
 package org.sundog.copy.ui
 
 import androidx.compose.material.MaterialTheme
-import androidx.compose.runtime.Composable
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Window
@@ -68,6 +68,23 @@ private fun App(
                 }
 
                 is PageType.SettingPage -> {
+                    var shouldShowDialog by remember { mutableStateOf(false) }
+                    var needSave by remember { mutableStateOf(false) }
+                    val onChangeCopyContent = remember {
+                        {
+                            needSave = true
+                        }
+                    }
+                    val onSaveCopyContent = remember {
+                        {
+                            needSave = false
+                        }
+                    }
+                    val onCancelClose = remember {
+                        {
+                            shouldShowDialog = false
+                        }
+                    }
                     Window(
                         state = rememberWindowState(
                             width = 500.dp,
@@ -75,9 +92,13 @@ private fun App(
                             position = WindowPosition(Alignment.Center),
                         ),
                         onCloseRequest = {
-                            sundogCopyAppState.onAction(
-                                onAction = WindowOnAction.MoveToTop
-                            )
+                            if (needSave) {
+                                shouldShowDialog = true
+                            } else {
+                                sundogCopyAppState.onAction(
+                                    WindowOnAction.MoveToTop
+                                )
+                            }
                         },
                         title = stringResource(Res.string.app_name),
                     ) {
@@ -87,7 +108,11 @@ private fun App(
                                 sundogCopyAppState.onAction(
                                     onAction = WindowOnAction.MoveToTop
                                 )
-                            }
+                            },
+                            shouldShowDialog = shouldShowDialog,
+                            onCancelClose = onCancelClose,
+                            onChangeCopyContent = onChangeCopyContent,
+                            onSaveCopyContent = onSaveCopyContent,
                         )
                     }
                 }

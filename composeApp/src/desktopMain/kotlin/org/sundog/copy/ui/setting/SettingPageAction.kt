@@ -14,6 +14,9 @@ sealed interface SettingPageOnAction {
 
     data object SaveCopyContents : SettingPageOnAction
     data object MoveToAboutApp : SettingPageOnAction
+    data object MoveToTop : SettingPageOnAction
+    data object CloseDialogButton : SettingPageOnAction
+
     data class ChangeCopyContent(
         val index: Int,
         val copyContent: CopyContent,
