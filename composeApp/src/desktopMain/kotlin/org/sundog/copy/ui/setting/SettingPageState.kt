@@ -21,6 +21,7 @@ fun rememberSettingPageState(
     onCancelClose: () -> Unit,
     onChangeCopyContent: () -> Unit,
     onSaveCopyContent: () -> Unit,
+    onShowAboutPage: () -> Unit,
 ): SettingPageState {
     val copyContents by viewModel.currentCopyContents.collectAsState()
 
@@ -36,6 +37,7 @@ fun rememberSettingPageState(
                 }
 
                 SettingPageOnAction.MoveToAboutApp -> {
+                    onShowAboutPage()
                 }
 
                 SettingPageOnAction.MoveToTop -> {

@@ -22,4 +22,10 @@
     <string name="setting_close_confirm_dialog_cancel">取消</string>
     <string name="setting_close_confirm_dialog_negative">いいえ</string>
     <string name="setting_close_confirm_dialog_positive">はい</string>
+    <string name="about_page_title">更新の確認</string>
+    <string name="about_page_using_version_label">お使いのバージョンは</string>
+    <string name="about_page_desu">です。</string>
+    <string name="about_page_check_update">更新を確認</string>
+    <string name="about_page_boot_browser">ブラウザが起動します。</string>
+    <string name="about_page_copyright">Copyright © 2015 - SUNDOGソフトウェア開発プロジェクト</string>
 </resources>

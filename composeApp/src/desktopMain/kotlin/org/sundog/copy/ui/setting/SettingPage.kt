@@ -34,6 +34,7 @@ fun SettingPageHost(
     onCancelClose: () -> Unit,
     onChangeCopyContent: () -> Unit,
     onSaveCopyContent: () -> Unit,
+    onShowAboutPage: () -> Unit,
 ) {
     LaunchedEffect(viewModel) {
         viewModel.initialize(
@@ -48,6 +49,7 @@ fun SettingPageHost(
         onCancelClose = onCancelClose,
         onChangeCopyContent = onChangeCopyContent,
         onSaveCopyContent = onSaveCopyContent,
+        onShowAboutPage = onShowAboutPage,
     )
 
     if (pageState.shouldDontSaveShowDialog) {

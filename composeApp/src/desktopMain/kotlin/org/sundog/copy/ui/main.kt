@@ -13,6 +13,7 @@ import kotlinproject.composeapp.generated.resources.app_name
 import org.jetbrains.compose.resources.stringResource
 import org.koin.compose.KoinApplication
 import org.sundog.copy.di.appModule
+import org.sundog.copy.ui.about.AboutPageHost
 import org.sundog.copy.ui.setting.SettingPageHost
 import org.sundog.copy.ui.top.TopPageHost
 
@@ -85,6 +86,17 @@ private fun App(
                             shouldShowDialog = false
                         }
                     }
+                    var showAboutPage by remember { mutableStateOf(false) }
+                    val onShowAboutPage = remember {
+                        {
+                            showAboutPage = true
+                        }
+                    }
+                    val onCloseAboutPage = remember {
+                        {
+                            showAboutPage = false
+                        }
+                    }
                     Window(
                         state = rememberWindowState(
                             width = 500.dp,
@@ -113,7 +125,13 @@ private fun App(
                             onCancelClose = onCancelClose,
                             onChangeCopyContent = onChangeCopyContent,
                             onSaveCopyContent = onSaveCopyContent,
+                            onShowAboutPage = onShowAboutPage,
                         )
+                        if (showAboutPage) {
+                            AboutPageHost(
+                                onCloseRequest = onCloseAboutPage
+                            )
+                        }
                     }
                 }
             }

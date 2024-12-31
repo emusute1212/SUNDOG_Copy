@@ -1,4 +1,6 @@
 import org.jetbrains.compose.desktop.application.dsl.TargetFormat
+import java.io.FileInputStream
+import java.util.*
 
 plugins {
     alias(libs.plugins.kotlinMultiplatform)
@@ -8,10 +10,10 @@ plugins {
 
 kotlin {
     jvm("desktop")
-    
+
     sourceSets {
         val desktopMain by getting
-        
+
         commonMain.dependencies {
             implementation(compose.runtime)
             implementation(compose.foundation)
@@ -46,7 +48,15 @@ compose.desktop {
         nativeDistributions {
             targetFormats(TargetFormat.Dmg, TargetFormat.Msi, TargetFormat.Deb)
             packageName = "org.sundog.copy"
-            packageVersion = "1.0.0"
+            packageVersion = getAppVersion()
         }
     }
+}
+
+fun getAppVersion(): String {
+    val properties = Properties()
+    properties.load(
+        FileInputStream("version.properties")
+    )
+    return properties.getProperty("app.version.code")
 }
